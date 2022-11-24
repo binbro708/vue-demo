@@ -50,11 +50,15 @@ export default {
   methods: {
     signIn() {
       const api = `${process.env.VUE_APP_API}admin/signin`;
-      console.log(api);
       this.$http.post(api, this.user).then((res) => {
-        // cookie儲存
-        const { token, expired } = res.data;
-        document.cookie = `myToken=${token};expired=${new Date(expired)}`;
+        // 如果登入的狀態是成功，就去存cookie
+        if (res.data.success) {
+          // cookie儲存
+          const { token, expired } = res.data;
+          document.cookie = `myToken=${token};expired=${new Date(expired)}`;
+          //到dashBoard取cookie的token，順便轉到dashBoard
+          this.$router.push("/dashboard/products");
+        }
       });
     },
   },
