@@ -1,10 +1,6 @@
 <template>
   <div class="text-end">
-    <button
-      class="btn btn-primary"
-      type="button"
-      @click="$refs.ProductsModal.showModel()"
-    >
+    <button class="btn btn-primary" type="button" @click="openModal">
       新增產品
     </button>
   </div>
@@ -38,7 +34,11 @@
       </tr>
     </tbody>
   </table>
-  <ProductsModal ref="ProductsModal"></ProductsModal>
+  <ProductsModal
+    ref="ProductsModal"
+    :product="tempProduct"
+    @update-product="updateProduct"
+  ></ProductsModal>
 </template>
 
 <script>
@@ -47,7 +47,7 @@ import ProductsModal from "../components/ProductModal.vue";
 export default {
   data() {
     // 定義產品跟分頁
-    return { products: [], pagination: {} };
+    return { products: [], pagination: {}, tempProduct: {} };
   },
   components: {
     ProductsModal,
@@ -60,6 +60,22 @@ export default {
           this.products = res.data.products;
           this.pagination = res.data.pagination;
         }
+      });
+    },
+    openModal() {
+      // 把temProduct清空後才打開
+      this.tempProduct = {};
+      const productComponent = this.$refs.ProductsModal;
+      productComponent.showModal();
+    },
+    updateProduct(item) {
+      this.tempProduct = item;
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`;
+      const productComponent = this.$refs.ProductsModal;
+      this.$http.post(api, { data: this.tempProduct }).then((res) => {
+        console.log(res);
+        productComponent.hideModal();
+        this.getProducts();
       });
     },
   },
