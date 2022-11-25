@@ -33,7 +33,12 @@
             >
               編輯
             </button>
-            <button class="btn btn-outline-danger btn-sm">刪除</button>
+            <button
+              class="btn btn-outline-danger btn-sm"
+              @click="delModal(product)"
+            >
+              刪除
+            </button>
           </div>
         </td>
       </tr>
@@ -44,10 +49,16 @@
     :product="tempProduct"
     @update-product="updateProduct"
   ></ProductsModal>
+  <DelModal
+    ref="DelModal"
+    :item="tempProduct"
+    @del-modal="getProducts()"
+  ></DelModal>
 </template>
 
 <script>
 import ProductsModal from "../components/ProductModal.vue";
+import DelModal from "../components/DelModal.vue";
 
 export default {
   data() {
@@ -56,6 +67,7 @@ export default {
   },
   components: {
     ProductsModal,
+    DelModal,
   },
   methods: {
     getProducts() {
@@ -68,7 +80,6 @@ export default {
       });
     },
     openModal(isNew, item) {
-      console.log(isNew, item);
       // 如果是點擊新增產品，打開來就會是空的
       if (isNew) {
         this.tempProduct = {};
@@ -82,6 +93,13 @@ export default {
       const productComponent = this.$refs.ProductsModal;
       productComponent.showModal();
     },
+    delModal(item) {
+      this.tempProduct = item;
+      console.log(this.tempProduct);
+      const delProductComponent = this.$refs.DelModal;
+      delProductComponent.showModal();
+      // delProductComponent.showModal();
+    },
     updateProduct(item) {
       this.tempProduct = item;
       // 新增就執行這邊的程式碼
@@ -93,8 +111,7 @@ export default {
         httpMethod = "put";
       }
       const productComponent = this.$refs.ProductsModal;
-      this.$http[httpMethod](api, { data: this.tempProduct }).then((res) => {
-        console.log(res);
+      this.$http[httpMethod](api, { data: this.tempProduct }).then(() => {
         productComponent.hideModal();
         this.getProducts();
       });
