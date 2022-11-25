@@ -1,6 +1,6 @@
 <template>
   <div class="text-end">
-    <button class="btn btn-primary" type="button" @click="openModal">
+    <button class="btn btn-primary" type="button" @click="openModal(true)">
       新增產品
     </button>
   </div>
@@ -27,7 +27,12 @@
         </td>
         <td>
           <div class="btn-group">
-            <button class="btn btn-outline-primary btn-sm">編輯</button>
+            <button
+              class="btn btn-outline-primary btn-sm"
+              @click="openModal(false, product)"
+            >
+              編輯
+            </button>
             <button class="btn btn-outline-danger btn-sm">刪除</button>
           </div>
         </td>
@@ -47,7 +52,7 @@ import ProductsModal from "../components/ProductModal.vue";
 export default {
   data() {
     // 定義產品跟分頁
-    return { products: [], pagination: {}, tempProduct: {} };
+    return { products: [], pagination: {}, tempProduct: {}, isNew: false };
   },
   components: {
     ProductsModal,
@@ -62,17 +67,33 @@ export default {
         }
       });
     },
-    openModal() {
+    openModal(isNew, item) {
+      console.log(isNew, item);
+      // 如果是點擊新增產品，打開來就會是空的
+      if (isNew) {
+        this.tempProduct = {};
+        // 如果不是點新增產品，那就剩下點編輯，那這個tempProduct就會是原本有的資料
+      } else {
+        this.tempProduct = { ...item };
+      }
+      // 原本isNew的false會被改成true
+      this.isNew = isNew;
       // 把temProduct清空後才打開
-      this.tempProduct = {};
       const productComponent = this.$refs.ProductsModal;
       productComponent.showModal();
     },
     updateProduct(item) {
       this.tempProduct = item;
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`;
+      // 新增就執行這邊的程式碼
+      let api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product`;
+      let httpMethod = "post";
+      // isNew=false 就是編輯的狀態
+      if (!this.isNew) {
+        api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${item.id}`;
+        httpMethod = "put";
+      }
       const productComponent = this.$refs.ProductsModal;
-      this.$http.post(api, { data: this.tempProduct }).then((res) => {
+      this.$http[httpMethod](api, { data: this.tempProduct }).then((res) => {
         console.log(res);
         productComponent.hideModal();
         this.getProducts();
