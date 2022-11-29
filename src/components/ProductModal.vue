@@ -1,3 +1,4 @@
+<!-- 產品Modal -->
 <template>
   <div
     class="modal fade"
@@ -15,7 +16,7 @@
           </h5>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
             aria-label="Close"
           ></button>
@@ -170,6 +171,7 @@
           >
             取消
           </button>
+          <!-- 把新增好的產品資料傳出去，並觸發外層的更新 -->
           <button
             type="button"
             class="btn btn-primary"
@@ -187,18 +189,14 @@
 import Modal from "bootstrap/js/dist/modal";
 
 export default {
-  // 內層所接收的props
+  // 接收外層傳進來的tempProduct
   props: {
     product: {
       type: Object,
       default() {
+        // 沒傳東西進來就預設是空值
         return {};
       },
-    },
-  },
-  watch: {
-    product() {
-      this.tempProduct = this.product;
     },
   },
   data() {
@@ -207,6 +205,12 @@ export default {
       // 要來接收外面的資料，等填完新增的表單再拋回去
       tempProduct: {},
     };
+  },
+  // product 是由外層props進來的
+  watch: {
+    product() {
+      this.tempProduct = this.product;
+    },
   },
   methods: {
     showModal() {

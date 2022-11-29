@@ -1,3 +1,4 @@
+<!-- 刪除用Modal -->
 <template>
   <div
     class="modal fade"
@@ -10,10 +11,10 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">刪除品項</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">刪除</h1>
           <button
             type="button"
-            class="btn-close"
+            class="btn-close btn-close-white"
             data-bs-dismiss="modal"
             aria-label="Close"
           ></button>
@@ -38,7 +39,7 @@
   </div>
 </template>
 <script>
-import Modal from "bootstrap/js/dist/modal";
+import ModalMixin from "@/mixins/modalMixin";
 
 export default {
   props: {
@@ -49,26 +50,20 @@ export default {
       model: {},
     };
   },
+  mixins: [ModalMixin],
   methods: {
     delProduct() {
-      console.log("a");
-      console.log(this.item.id);
-      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/product/${this.item.id}`;
-      this.$http.delete(api).then((res) => {
-        console.log(res);
+      let apiChange = "product";
+      if (this.item.create_at) {
+        apiChange = "order";
+      }
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/admin/${apiChange}/${this.item.id}`;
+      this.$http.delete(api).then(() => {
         this.hideModal();
+        // 這邊觸發完要接著觸發外層的methods
         this.$emit("del-modal");
       });
     },
-    showModal() {
-      this.modal.show();
-    },
-    hideModal() {
-      this.modal.hide();
-    },
-  },
-  mounted() {
-    this.modal = new Modal(this.$refs.modal);
   },
 };
 </script>

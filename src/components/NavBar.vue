@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar navbar-expand-lg bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar</a>
+      <a class="navbar-brand" href="#">後台</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -16,16 +16,22 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <router-link to="/dashboard/products" class="nav-link"
+              >產品</router-link
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Features</a>
+            <router-link to="/dashboard/orders" class="nav-link"
+              >訂單</router-link
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#" @click.prevent="logout">登出</a>
+            <router-link to="/dashboard/coupons" class="nav-link"
+              >優惠券</router-link
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link disabled">Disabled</a>
+            <a href="#" @click.prevent="logout" class="nav-link">登出</a>
           </li>
         </ul>
       </div>
