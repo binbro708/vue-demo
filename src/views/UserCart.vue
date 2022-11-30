@@ -54,7 +54,7 @@
                     <small
                       v-if="cart.final_total !== cart.total"
                       class="text-success"
-                      >折扣價：</small
+                      >折扣價(打折後)：</small
                     >
                     {{ $filters.currency(item.final_total) }}
                   </td>
@@ -268,6 +268,13 @@ export default {
         if (res.data.success) {
           this.$router.push(`/user/checkout/${res.data.orderId}`);
         }
+      });
+    },
+    removeCartItem(id) {
+      const api = `${process.env.VUE_APP_API}api/${process.env.VUE_APP_PATH}/cart/${id}`;
+
+      this.$http.delete(api).then(() => {
+        this.getCart();
       });
     },
     goPayBtn() {

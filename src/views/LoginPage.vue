@@ -4,24 +4,24 @@
       <div class="col-md-6">
         <h1 class="h3 mb-3 font-weight-normal">請先登入</h1>
         <div class="mb-2">
-          <label for="inputEmail" class="sr-only">Email address</label>
+          <label for="inputEmail" class="sr-only">信箱</label>
           <input
             type="email"
             id="inputEmail"
             class="form-control"
-            placeholder="Email address"
+            placeholder="信箱"
             required
             autofocus
             v-model="user.username"
           />
         </div>
         <div class="mb-2">
-          <label for="inputPassword" class="sr-only">Password</label>
+          <label for="inputPassword" class="sr-only">密碼</label>
           <input
             type="password"
             id="inputPassword"
             class="form-control"
-            placeholder="Password"
+            placeholder="密碼"
             required
             v-model="user.password"
           />
